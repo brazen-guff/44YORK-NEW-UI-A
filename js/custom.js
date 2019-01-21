@@ -2,7 +2,54 @@
 "use strict";
 'use strict';
 
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+console.log("::LOADING 44YORK CUSTOM::");
+
+var moduleList = [];
+
+// Please call this at the beinning of every new file, for documentation and possible future use
+function registerModule(name) {
+  console.log("Registering " + name);
+  moduleList.push(name);
+}
+
 var app = angular.module('viewCustom', ['angularLoad']);
+
+// Begin BrowZine - Primo Integration...
+  window.browzine = {
+    api: "https://public-api.thirdiron.com/public/v1/libraries/565",
+    apiKey: "ba4a928c-2968-42f3-b9f8-11a8990b6914",
+ 
+    journalCoverImagesEnabled: true,
+ 
+    journalBrowZineWebLinkTextEnabled: true,
+    journalBrowZineWebLinkText: "View Journal Contents",
+ 
+    acticleBrowZineWebLinkTextEnabled: true,
+    articleBrowZineWebLinkText: "View Issue Contents",
+ 
+    articlePDFDownloadLinkEnabled: true,
+    articlePDFDownloadLinkText: "Download PDF",
+ 
+    printRecordsIntegrationEnabled: true,
+  };
+ 
+  browzine.script = document.createElement("script");
+  browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
+  document.head.appendChild(browzine.script);
+ 
+  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
+    window.browzine.primo.searchResult($scope);
+  });
+ 
+  app.component('prmSearchResultAvailabilityLineAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'prmSearchResultAvailabilityLineAfterController'
+  });
+// ... End BrowZine - Primo Integration
+
 
 /*libchat embded*/
 var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = 'false'; 
@@ -61,34 +108,34 @@ app.component('prmFacetRangeAfter', {
 
 // example - only display link if call number present and item unavailable
 
-app.component('prmSearchResultAvailabilityLineAfter', {
-	bindings: { parentCtrl: '<' },
-	controller: 'prmSearchResultAvailabilityLineAfterController',
-	template: '<a ng-show="$ctrl.showTraceLink" href="https://library.college.edu/traceform.php">Not on Shelf?</a>'
+//app.component('prmSearchResultAvailabilityLineAfter', {
+//	bindings: { parentCtrl: '<' },
+//	controller: 'prmSearchResultAvailabilityLineAfterController',
+//	template: '<a ng-show="$ctrl.showTraceLink" href="https://library.college.edu/traceform.php">Not on Shelf?</a>'
 	//note - {{$ctrl.callNumber}} - can include objects like this 
-});
+//});
 
-app.controller('prmSearchResultAvailabilityLineAfterController', [function(){
+//app.controller('prmSearchResultAvailabilityLineAfterController', [function(){
 	// get the data from the current object
 	// use "try" blocks in case the data isn't there
-	try {
-    	this.callNumber = this.parentCtrl.result.delivery.bestlocation.callNumber;
-	} catch(e) {
-    	this.callNumber = "";
-	}
+	//try {
+    //	this.callNumber = this.parentCtrl.result.delivery.bestlocation.callNumber;
+	//} catch(e) {
+    //	this.callNumber = "";
+	//}
 
-	try {
-    	this.availability = this.parentCtrl.item.delivery.bestlocation.availabilityStatus;
-	} catch(e) {
-    	this.availability = "";
-	}
+	//try {
+    //	this.availability = this.parentCtrl.item.delivery.bestlocation.availabilityStatus;
+	//} catch(e) {
+    //	this.availability = "";
+	//}
 
 	// make a Boolean variable for whether or not you want to show the trace link
-	this.showTraceLink = Boolean(this.availability === 'available' && this.callNumber);
-}]);
-
-
+	//this.showTraceLink = Boolean(this.availability === 'available' && this.callNumber);
 })();
+
+
+
 
 
 

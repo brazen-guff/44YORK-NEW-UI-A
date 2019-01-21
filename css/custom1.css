@@ -678,7 +678,7 @@ prm-no-search-result > md-card {
 
 /*more space for logo */
 prm-topbar {
-    height: 140px;
+    height: 100px;
 }
 
 prm-topbar prm-logo {
@@ -693,6 +693,27 @@ md-card-content > iframe {
     width:100%;
 }
 
+prm-topbar .top-nav-bar {
+	background-color: #404040;
+}
+
+prm-search-bar {
+	background-color: #175F77;
+	
+}
+
+/*login button*/
+.md-button:hover:not([disabled]),.md-button:focus:not([disabled]){color:#080606;background-color:rgba(58, 58, 58, 0.1);}
+prm-user-area-expandable .md-button.user-button{
+	color:#FFFFFF;
+	background-color:#97217A}
+
+
+md-card-title {
+	
+	background-color:#97217A
+	
+}
 
 /*end peh customizations */
 
