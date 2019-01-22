@@ -9,13 +9,13 @@ console.log("::LOADING 44YORK CUSTOM::");
 
 var moduleList = [];
 
-// Please call this at the beinning of every new file, for documentation and possible future use
+// Please call this at the beginning of every new file, for documentation and possible future use
 function registerModule(name) {
   console.log("Registering " + name);
   moduleList.push(name);
 }
 
-var app = angular.module('viewCustom', ['angularLoad']);
+var app = angular.module('viewCustom', ['angularLoad','reportProblem'])
 
 // Begin BrowZine - Primo Integration...
   window.browzine = {
@@ -86,7 +86,7 @@ app.component('prmNoSearchResultAfter',{
 
 /*end no results customisation */
 
-
+/*Yewno box */
 app.controller('prmFacetRangeAfterController', [function () {
   try {
     this.query = this.parentCtrl.facetService.$location.$$search.query.split(",")[2];
@@ -100,6 +100,65 @@ app.component('prmFacetRangeAfter', {
   controller: 'prmFacetRangeAfterController',
   template: '<md-card class="default-card zero-margin _md md-primoExplore-theme"><md-card-content><p><strong>Want to try a different search method?</strong> Try a conceptual search in Yewno:</p><md-button class="md-raised md-button md-primoExplore-theme md-ink-ripple" href="https://discover.yewno.com?query={{$ctrl.query}}" target="_blank" type="button" aria-label="Search Yewno" style="margin-left:0;margin-right:0;"> <img src="custom/44YORK-NEW-UI-A/img/yewno-logo.png" width="22" height="22" alt="yewno-logo" style="vertical-align:middle;"> Search Yewno</md-button></md-card-content></md-card>'
 });
+
+/*End Yewno box */
+
+/*report a problem link*/
+angular.module('reportProblem', []);
+
+
+/*capture parameters from querystring*/
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+	
+};
+
+
+	var strID = getUrlParameter('docid');
+	var strScope = getUrlParameter('search_scope');
+	var strQuery = getUrlParameter('query');
+
+angular.module('reportProblem').component('ocaReportProblem', {
+  bindings: {
+    messageText: '@',
+    buttonText: '@',
+    reportUrl: '@'
+  },
+  template: '\n      <div ng-if="$ctrl.show" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small">{{$ctrl.messageText}}</span>\n          <a ng-href="{{$ctrl.targetUrl}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label="Report a Problem" style="color: #5c92bd;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_report_problem_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.buttonText}}</span>\n              </button>\n          </a>\n      </div>',
+  controller: ['$location', '$httpParamSerializer', function ($location, $httpParamSerializer) {
+    this.messageText = this.messageText || 'See something that doesn\'t look right?';
+    this.buttonText = this.buttonText || 'Report a Problem';
+    this.showLocations = ['/fulldisplay', '/openurl'];
+    this.$onInit = function () {
+	  this.targetUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url&entry.982245342=' + strID + '&entry.863655331=' + strScope + '&entry.136857830=' + strQuery;
+      this.show = this.showLocations.includes($location.path()); 
+	  var strLink = $httpParamSerializer($location.search());  
+    };
+  }]
+});
+
+
+	/*open Google form passing in relevant params */
+	/*app.component('prmActionListAfter', {template: '<oca-report-problem report-url="https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url&entry.982245342=' + strID + '&entry.863655331=' + strScope + '&entry.136857830=' + strQuery +  '/>'})*/
+
+app.component('prmActionListAfter', {template: '<oca-report-problem/>'});
+
+/* end report problem */
+
+/*footer*/
+app.component('prm-explore-footer-after', {
+
+             bindings: { parentCtrl: '<' },
+
+             template: 'enter html here'
+
+});
+	
+
+
 
 /*useful for writing object to console for examination*/
 /*app.controller('prmSearchResultAvailabilityLineAfterController', [function(){

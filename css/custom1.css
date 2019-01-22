@@ -678,7 +678,7 @@ prm-no-search-result > md-card {
 
 /*more space for logo */
 prm-topbar {
-    height: 100px;
+    height: 75px;
 }
 
 prm-topbar prm-logo {
