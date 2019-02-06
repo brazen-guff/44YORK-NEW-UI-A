@@ -50,6 +50,16 @@ var app = angular.module('viewCustom', ['angularLoad','reportProblem'])
   });
 // ... End BrowZine - Primo Integration
 
+  app.component('topbanner', {
+    template: '<li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url" target="_blank">Feedback</a></li>'
+});
+
+
+app.component('prmTopBarBefore', {
+    bindings: { parentCtrl: '<' },
+    template: '\n    <topbanner>\n    </topbanner>\n    '
+});
+
 
 /*libchat embded*/
 var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = 'false'; 
@@ -192,12 +202,3 @@ app.component('prm-explore-footer-after', {
 	// make a Boolean variable for whether or not you want to show the trace link
 	//this.showTraceLink = Boolean(this.availability === 'available' && this.callNumber);
 })();
-
-
-
-
-
-
-
-
-
