@@ -67,6 +67,20 @@ lc.src =  'https://region-eu.libanswers.com/load_chat.php?hash=674e97e7f662af5ae
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
 /*end libchat embed*/
 
+
+/*----------floating libchat-----------*/
+(function () {
+    var lc = document.createElement('script');lc.type = 'text/javascript';lc.async = 'true';
+    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'region-eu.libanswers.com/load_chat.php?hash=055ce63e927df58171805183f6b12001';
+    var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(lc, s);
+})();
+/*---------------libchat code ends here---------------*/
+
+
+
+
+
+
 // Enhance No Results tile
 app.controller('prmNoSearchResultAfterController', [function () {
   var vm = this;
