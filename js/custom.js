@@ -116,13 +116,21 @@ angular.module('googleAnalytics').value('analyticsOptions', {
 
 /*end google analytics*/
 
-  app.component('prmActionListAfter', { template: '<oca-report-problem />' });
-
   /*libchat embded*/
   var lc = document.createElement('script');lc.type = 'text/javascript';lc.async = 'false';
   lc.src = 'https://region-eu.libanswers.com/load_chat.php?hash=674e97e7f662af5aea4b66c464fb3b4c';
   var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(lc, s);
   /*end libchat embed*/
+  
+  
+  /*----------floating libchat-----------*/
+(function () {
+    var lc = document.createElement('script');lc.type = 'text/javascript';lc.async = 'true';
+    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'region-eu.libanswers.com/load_chat.php?hash=055ce63e927df58171805183f6b12001';
+    var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(lc, s);
+})();
+/*---------------libchat code ends here---------------*/
+  
   
   // LibAnswers FAQ
                 (function() {
@@ -206,7 +214,24 @@ angular.module('googleAnalytics').value('analyticsOptions', {
   // make a Boolean variable for whether or not you want to show the trace link
   //this.showTraceLink = Boolean(this.availability === 'available' && this.callNumber);
   
-  angular.module('reportProblem', []);
+ angular.module('reportProblem', []);
+ 
+ 
+ /*capture parameters from querystring*/
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+
+};
+
+
+	var strID = getUrlParameter('docid');
+	var strScope = getUrlParameter('search_scope');
+	var strQuery = getUrlParameter('query')
+	var rep_url = "https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url&entry.982245342=" + strID + '&entry.863655331=' + strScope + '&entry.136857830=' + strQuery
+	
 
 angular.module('reportProblem').component('ocaReportProblem', {
   bindings: {
@@ -223,8 +248,17 @@ angular.module('reportProblem').component('ocaReportProblem', {
       this.targetUrl = this.reportUrl + $httpParamSerializer($location.search());
       this.show = this.showLocations.includes($location.path());
     };
-  }]
+  }] 
 });
+
+  	/*open Google form passing in relevant params 
+	app.component('prmActionListAfter', {template: '<oca-report-problem report-url="https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url&entry.982245342=' + strID + '&entry.863655331=' + strScope + '&entry.136857830=' + strQuery +  '/>'});*/
+	
+/*app.component('prmActionListAfter', {template: '<oca-report-problem report-url=' +rep_url + ''' + message-text="See something that doesn\'t look right?" button-text="Let us know" />'});*/
+
+app.component('prmActionListAfter', {template: '<oca-report-problem report-url="' + rep_url + '" message-text="Want to report a problem?" button-text="Submit report" />'})
+
+/* end report problem */  
   
 })();
 
